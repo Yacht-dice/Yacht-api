@@ -1,0 +1,7 @@
+version: '3'
+services:
+  spring:
+    image: nohy6630/cicd:latest
+    container_name: yachtdice
+    ports:
+      - 8080:8080
