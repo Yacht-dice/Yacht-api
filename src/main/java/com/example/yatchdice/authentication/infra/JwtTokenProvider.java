@@ -47,4 +47,18 @@ public class JwtTokenProvider {
             return e.getClaims();
         }
     }
+
+    // JWT 토큰 유효성 검증 메서드
+    public boolean validToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            // 여기서 JwtException은 만료, 서명 불일치 등을 포함한 JWT 관련 예외
+            return false;
+        }
+    }
 }
