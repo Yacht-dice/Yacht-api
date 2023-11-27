@@ -1,6 +1,6 @@
 package com.example.yatchdice.authentication.domain;
 
-import com.example.yatchdice.authentication.infra.JwtTokenProvider;
+import com.example.yatchdice.provider.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,8 +11,8 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class AuthTokensGenerator {
     private static final String BEARER_TYPE = "Bearer"; // 토큰 타입을 "Bearer"로 설정
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            // AccessToken 30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // RefreshToken 7일
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 14;    // AccessToken 14일
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 14;  // RefreshToken 14일
 
     private final JwtTokenProvider jwtTokenProvider;
 

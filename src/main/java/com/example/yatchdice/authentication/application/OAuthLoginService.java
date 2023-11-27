@@ -6,7 +6,7 @@ import com.example.yatchdice.authentication.domain.oauth.OAuthInfoResponse;
 import com.example.yatchdice.authentication.domain.oauth.OAuthLoginParams;
 import com.example.yatchdice.authentication.domain.oauth.RequestOAuthInfoService;
 import com.example.yatchdice.member.domain.Member;
-import com.example.yatchdice.member.domain.MemberRepository;
+import com.example.yatchdice.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

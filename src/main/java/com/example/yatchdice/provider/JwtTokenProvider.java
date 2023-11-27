@@ -1,4 +1,4 @@
-package com.example.yatchdice.authentication.infra;
+package com.example.yatchdice.provider;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
