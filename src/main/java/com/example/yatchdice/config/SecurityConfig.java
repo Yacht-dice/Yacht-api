@@ -37,7 +37,9 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
-                .requestMatchers("/api/auth/**"); //일단 시큐리티 모든 경로에 대해서 무시하게 설정, 나중에 로그인 구현한뒤 풀어줘야 함
+                .requestMatchers(
+                        "/api/auth/**",
+                        "/deploy/**"); //일단 시큐리티 모든 경로에 대해서 무시하게 설정, 나중에 로그인 구현한뒤 풀어줘야 함
     }
 }
 
