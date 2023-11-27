@@ -2,6 +2,7 @@ package com.example.yatchdice.authentication.application;
 
 import com.example.yatchdice.authentication.domain.AuthTokens;
 import com.example.yatchdice.authentication.infra.kakao.KakaoLoginParams;
+import com.example.yatchdice.authentication.infra.naver.NaverLoginParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,11 @@ public class AuthController {
     @PostMapping("/kakao")
     public ResponseEntity<AuthTokens> loginKakao(@RequestBody KakaoLoginParams params) { // Athorization Code를 파라미터로 받음
         // oAuthLoginService의 login 메서드를 호출, 인증 토큰을 받아서 반환
+        return ResponseEntity.ok(oAuthLoginService.login(params));
+    }
+
+    @PostMapping("/naver")
+    public ResponseEntity<AuthTokens> loginNaver(@RequestBody NaverLoginParams params) {
         return ResponseEntity.ok(oAuthLoginService.login(params));
     }
 
