@@ -24,7 +24,7 @@ public class MemberController {
 
     // 회원 정보 가져오는거
     @GetMapping("/test")
-    public void test() {
-        log.info("접속 이메일: {}", SecurityContextUtil.getAuthenticatedUserEmail());
+    public String test() {
+        return SecurityContextUtil.getAuthenticatedUserEmail();
     }
 }
