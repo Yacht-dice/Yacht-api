@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -33,6 +34,10 @@ public class JwtTokenProvider {
     public String extractSubject(String accessToken) {
         Claims claims = parseClaims(accessToken);
         return claims.getSubject();
+    }
+
+    public String extractJwt(final StompHeaderAccessor accessor) {
+        return accessor.getFirstNativeHeader("Authorization");
     }
 
     // JWT에서 클레임 추출을 위한 함수 (식별자, 발행 시간, 만료 시간. 발급자)
