@@ -1,4 +1,4 @@
-package com.example.yatchdice.config;
+package com.example.yatchdice.config.websocket;
 
 import com.example.yatchdice.exception.badrequest.BadRequestException;
 import com.example.yatchdice.exception.badrequest.BadRequestTokenException;
@@ -15,6 +15,8 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
 @Order(Ordered.HIGHEST_PRECEDENCE + 99)
@@ -23,18 +25,20 @@ public class StompHandler implements ChannelInterceptor {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
 
         final StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-
-        log.info("sdf");
-        // websocket 연결시 헤더의 jwt token 유효성 검증
         if (StompCommand.CONNECT == accessor.getCommand()) {
             final String authorization = jwtTokenProvider.extractJwt(accessor);
-
-            if(!jwtTokenProvider.validToken(authorization))
+            if(!jwtTokenProvider.validToken(authorization)) {
                 throw new BadRequestTokenException();
+            }
+            Map<String, Object> sessionAttributes = accessor.getSessionAttributes();
+            if (sessionAttributes != null) {
+                sessionAttributes.put("userId", jwtTokenProvider.extractSubject(authorization));
+            }
         }
         return message;
     }
