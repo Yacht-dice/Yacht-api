@@ -29,7 +29,7 @@ public class SecurityConfig {
         http
                 .httpBasic(httpBasic -> httpBasic.disable()) //시큐리티 기본 로그인 해제
                 .csrf(csrf -> csrf.disable())
-                .cors(Customizer.withDefaults())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().authenticated()
                 )
