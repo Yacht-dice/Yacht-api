@@ -7,10 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "auth", description = "로그인 관련 API")
 @RestController
@@ -28,6 +25,7 @@ public class AuthController {
             후에 accessToken 사용시 request header에 Authorization값에 "Bearer 전달받은엑세스토큰" 형식으로 사용해주세요.
             """)
     @PostMapping("/kakao")
+    @CrossOrigin(origins = "*",maxAge = 3600)
     public ResponseEntity<AuthTokens> loginKakao(@RequestBody KakaoLoginParams params) { // Athorization Code를 파라미터로 받음
         // oAuthLoginService의 login 메서드를 호출, 인증 토큰을 받아서 반환
         return ResponseEntity.ok(oAuthLoginService.login(params));
@@ -41,6 +39,7 @@ public class AuthController {
             후에 accessToken 사용시 request header에 Authorization값에 "Bearer 전달받은엑세스토큰" 형식으로 사용해주세요.
             """)
     @PostMapping("/naver")
+    @CrossOrigin(origins = "*",maxAge = 3600)
     public ResponseEntity<AuthTokens> loginNaver(@RequestBody NaverLoginParams params) {
         return ResponseEntity.ok(oAuthLoginService.login(params));
     }
