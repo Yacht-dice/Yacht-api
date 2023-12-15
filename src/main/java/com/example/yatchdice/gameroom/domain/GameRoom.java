@@ -19,8 +19,7 @@ public class GameRoom {
     private String roomCode;
 
     @Builder
-    public GameRoom(Long id, String roomCode) {
-        this.id = id;
+    public GameRoom(String roomCode) {
         this.roomCode = roomCode;
     }
 }
