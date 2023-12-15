@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - develop-check
   pull_request:
     branches:
       - develop
