@@ -21,12 +21,19 @@ public class Member {
 
     private String nickname;
 
+    private String image;
+
     private OAuthProvider oAuthProvider;
 
     @Builder
-    public Member(String email, String nickname, OAuthProvider oAuthProvider) {
+    public Member(String email, String nickname, OAuthProvider oAuthProvider, String image) {
         this.email = email;
         this.nickname = nickname;
         this.oAuthProvider = oAuthProvider;
+        this.image = image;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
