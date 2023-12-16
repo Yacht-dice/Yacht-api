@@ -38,6 +38,7 @@ public class MemberController {
             사용자가 join 또는 host 버튼을 눌렀을 때 해당 방 정보에 subscribe을 할 텐데, 그 전에 이 api를 설정하여 먼저 닉네임을 설정해주세요.
             """)
     @PostMapping("/nickname")
+    @CrossOrigin(origins = "*",maxAge = 3600)
     public ResponseEntity<NicknameResponse> setNickname(@RequestBody NicknameRequest nicknameRequest){
         String email = SecurityContextUtil.getAuthenticatedUserEmail();
         return ResponseEntity.ok(memberService.setNickname(nicknameRequest, email));

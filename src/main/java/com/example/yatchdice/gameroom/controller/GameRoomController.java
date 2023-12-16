@@ -27,6 +27,7 @@ public class GameRoomController {
             이 api를 먼저 호출하여 응답받은 방코드를 얻은 뒤, 해당 방 코드를 이용해 websocket에 subscribe 해주세요.
             """)
     @GetMapping("/code")
+    @CrossOrigin(origins = "*",maxAge = 3600)
     public String generateUniqueRoomCode() {
         String roomCode;
         do {
