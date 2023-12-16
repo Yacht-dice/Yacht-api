@@ -2,6 +2,7 @@ package com.example.yatchdice.game.controller;
 
 import com.example.yatchdice.game.dto.request.SocketRequest;
 import com.example.yatchdice.game.dto.response.JoinResponse;
+import com.example.yatchdice.game.dto.response.MemberStatusResponse;
 import com.example.yatchdice.game.dto.response.PlayResponse;
 import com.example.yatchdice.game.dto.response.SocketResponse;
 import com.example.yatchdice.game.service.GameService;
@@ -15,8 +16,11 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,17 +35,31 @@ public class GameController {
         return gameService.receiveMessage(socketRequest, userId);
     }
 
-    @MessageMapping("/games/{roomCode}/join")
+    @MessageMapping("/games/{roomCode}/guest")
     @SendTo("/sub/games/{roomCode}/host")
-    public JoinResponse joinGame(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomCode) {
+    public MemberStatusResponse joinGame(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomCode) {
+        log.info("joinGame()");
         long userId = Long.parseLong((String) headerAccessor.getSessionAttributes().get("userId"));
         return gameService.joinGame(userId);
     }
 
-    @MessageMapping("/games/{roomCode}/play")
+    @MessageMapping("/games/{roomCode}/host")
     @SendTo("/sub/games/{roomCode}/guest")
-    public PlayResponse playGame(@DestinationVariable String roomCode) {
-        log.info(roomCode);
-        return PlayResponse.of();
+    public MemberStatusResponse playGame(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomCode) {
+        long userId = Long.parseLong((String) headerAccessor.getSessionAttributes().get("userId"));
+        return gameService.playGame(userId);
+    }
+
+    @SubscribeMapping("/games/{roomCode}/host")
+    public MemberStatusResponse hostGame(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomCode){
+        log.info("sdf");
+        long userId = Long.parseLong((String) headerAccessor.getSessionAttributes().get("userId"));
+        return gameService.hostGame(userId, roomCode);
+    }
+
+    @SubscribeMapping("/games/{roomCode}/guest")
+    public List<MemberStatusResponse> joinGameOnFirst(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomCode){
+        long userId = Long.parseLong((String) headerAccessor.getSessionAttributes().get("userId"));
+        return gameService.joinGameOnFirst(userId, roomCode);
     }
 }
