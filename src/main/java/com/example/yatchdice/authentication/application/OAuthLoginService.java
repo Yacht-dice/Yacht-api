@@ -28,6 +28,7 @@ public class OAuthLoginService {
         // 멤버 ID를 사용하여 인증 토큰을 생성해서 반환
         return authTokensGenerator.generate(memberId);
     }
+
     // 주어진 OAuth 정보를 사용하여 멤버를 찾거나 새로 생성
     private Long findOrCreateMember(OAuthInfoResponse oAuthInfoResponse) {
         // 이메일을 기반으로 멤버를 find
@@ -35,6 +36,7 @@ public class OAuthLoginService {
                 .map(Member::getId)
                 .orElseGet(() -> newMember(oAuthInfoResponse));
     }
+
     // 새 멤버를 생성하고 저장
     private Long newMember(OAuthInfoResponse oAuthInfoResponse) {
         // OAuth 정보를 사용하여 멤버 객체를 생성
@@ -42,6 +44,7 @@ public class OAuthLoginService {
                 .email(oAuthInfoResponse.getEmail())
                 .nickname(oAuthInfoResponse.getNickname())
                 .oAuthProvider(oAuthInfoResponse.getOAuthProvider())
+                .image("https://yachtdice.s3.ap-northeast-2.amazonaws.com/profile" + ((int) (Math.random() * 3) + 1) + ".png")
                 .build();
         // 멤버 객체를 저장하고 저장된 객체의 ID를 반환
         return memberRepository.save(member).getId();
