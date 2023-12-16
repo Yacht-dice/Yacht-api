@@ -1,13 +1,12 @@
 package com.example.yatchdice.member.domain;
 
 import com.example.yatchdice.authentication.domain.oauth.OAuthProvider;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.yatchdice.gameroom.domain.GameRoom;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 @Getter
 @Entity
 @NoArgsConstructor
@@ -24,6 +23,12 @@ public class Member {
     private String image;
 
     private OAuthProvider oAuthProvider;
+
+    @OneToOne(mappedBy = "host", cascade = CascadeType.ALL)
+    private GameRoom myGame;
+
+    @OneToOne(mappedBy = "guest", cascade = CascadeType.ALL)
+    private GameRoom otherGame;
 
     @Builder
     public Member(String email, String nickname, OAuthProvider oAuthProvider, String image) {

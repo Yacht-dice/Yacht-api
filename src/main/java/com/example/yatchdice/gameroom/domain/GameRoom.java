@@ -1,9 +1,7 @@
 package com.example.yatchdice.gameroom.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.yatchdice.member.domain.Member;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +16,24 @@ public class GameRoom {
 
     private String roomCode;
 
+    @OneToOne
+    @JoinColumn(name = "host_id")
+    private Member host;
+
+    @OneToOne
+    @JoinColumn(name = "guest_id")
+    private Member guest;
+
     @Builder
     public GameRoom(String roomCode) {
         this.roomCode = roomCode;
+    }
+
+    public void setHost(Member host) {
+        this.host = host;
+    }
+
+    public void setGuest(Member guest) {
+        this.guest = guest;
     }
 }
