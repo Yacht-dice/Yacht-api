@@ -1,11 +1,15 @@
 package com.example.yatchdice.gameroom.controller;
 
 import com.example.yatchdice.gameroom.domain.GameRoom;
+import com.example.yatchdice.gameroom.dto.request.CheckRoomRequest;
+import com.example.yatchdice.gameroom.dto.response.CheckRoomResponse;
 import com.example.yatchdice.gameroom.repository.GameRoomRepository;
+import com.example.yatchdice.gameroom.service.GameRoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Random;
@@ -17,17 +21,18 @@ import java.util.Random;
 @Slf4j
 public class GameRoomController {
     private final GameRoomRepository gameRoomRepository;
+    private final GameRoomService gameRoomService;
 
     // 방 코드 생성 후 주는거
     @Operation(summary = "방 코드 생성하기", description = """
             방 입장 전 화면에서 사용자는 닉네임 입력하고 join 또는 host 버튼을 눌러 방에 입장을 할 것입니다.
-            
+                        
             사용자가 host 버튼을 눌러 방 생성을 하려면, 방코드가 필요할 것입니다.
-            
+                        
             이 api를 먼저 호출하여 응답받은 방코드를 얻은 뒤, 해당 방 코드를 이용해 websocket에 subscribe 해주세요.
             """)
     @GetMapping("/code")
-    @CrossOrigin(origins = "*",maxAge = 3600)
+    @CrossOrigin(origins = "*", maxAge = 3600)
     public String generateUniqueRoomCode() {
         String roomCode;
         do {
@@ -42,8 +47,8 @@ public class GameRoomController {
     }
 
     @GetMapping("/clear")
-    @CrossOrigin(origins = "*",maxAge = 3600)
-    public void clearRoom(){
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    public void clearRoom() {
         gameRoomRepository.deleteAll();
     }
 
@@ -55,5 +60,11 @@ public class GameRoomController {
                 .limit(length)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
+    }
+
+    @PostMapping("/check")
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    public ResponseEntity<CheckRoomResponse> checkRoom(@RequestBody CheckRoomRequest checkRoomRequest) {
+        return ResponseEntity.ok(gameRoomService.checkRoom(checkRoomRequest));
     }
 }
