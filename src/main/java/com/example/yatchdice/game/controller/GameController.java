@@ -58,7 +58,7 @@ public class GameController {
     }
 
     @SubscribeMapping("/games/{roomCode}/guest")
-    public List<MemberStatusResponse> joinGameOnFirst(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomCode){
+    public MemberStatusResponse joinGameOnFirst(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomCode){
         long userId = Long.parseLong((String) headerAccessor.getSessionAttributes().get("userId"));
         return gameService.joinGameOnFirst(userId, roomCode);
     }
