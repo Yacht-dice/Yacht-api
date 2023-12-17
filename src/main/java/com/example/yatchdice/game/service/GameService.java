@@ -66,7 +66,7 @@ public class GameService {
     }
 
     @Transactional
-    public List<MemberStatusResponse> joinGameOnFirst(long userId, String roomCode) {
+    public MemberStatusResponse joinGameOnFirst(long userId, String roomCode) {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(NotFoundMemberException::new);
         GameRoom gameRoom = gameRoomRepository.findByRoomCode(roomCode)
@@ -74,16 +74,13 @@ public class GameService {
 //        if (gameRoom.getGuest() != null)
 //            throw new BadRequestJoinException();
         if (member.getMyGame() != null) {
-            if(!member.getMyGame().equals(gameRoom))//테스트 위해 임시 추가
+            if (!member.getMyGame().equals(gameRoom))//테스트 위해 임시 추가
                 member.getMyGame().setHost(null);
         }
         if (member.getOtherGame() != null) {
             member.getOtherGame().setGuest(null);
         }
         gameRoom.setGuest(member);
-        return List.of(
-                MemberStatusResponse.of(gameRoom.getHost(), MemberStatus.HOST),
-                MemberStatusResponse.of(gameRoom.getGuest(), MemberStatus.GUEST)
-        );
+        return MemberStatusResponse.of(gameRoom.getHost(), MemberStatus.HOST);
     }
 }
