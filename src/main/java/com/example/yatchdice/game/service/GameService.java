@@ -14,6 +14,7 @@ import com.example.yatchdice.gameroom.repository.GameRoomRepository;
 import com.example.yatchdice.member.domain.Member;
 import com.example.yatchdice.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class GameService {
     private final MemberRepository memberRepository;
     private final GameRoomRepository gameRoomRepository;
@@ -53,6 +55,12 @@ public class GameService {
                 .orElseThrow(NotFoundRoomException::new);
 //        if (gameRoom.getHost() != null)
 //            throw new BadRequestHostException();
+        if (member.getMyGame() != null) {
+            member.getMyGame().setHost(null);
+        }
+        if (member.getOtherGame() != null) {
+            member.getOtherGame().setGuest(null);
+        }
         gameRoom.setHost(member);
         return MemberStatusResponse.of(member, MemberStatus.HOST);
     }
@@ -65,6 +73,13 @@ public class GameService {
                 .orElseThrow(NotFoundRoomException::new);
 //        if (gameRoom.getGuest() != null)
 //            throw new BadRequestJoinException();
+        if (member.getMyGame() != null) {
+            if(!member.getMyGame().equals(gameRoom))//테스트 위해 임시 추가
+                member.getMyGame().setHost(null);
+        }
+        if (member.getOtherGame() != null) {
+            member.getOtherGame().setGuest(null);
+        }
         gameRoom.setGuest(member);
         return List.of(
                 MemberStatusResponse.of(gameRoom.getHost(), MemberStatus.HOST),

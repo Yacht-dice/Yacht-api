@@ -41,6 +41,12 @@ public class GameRoomController {
         return roomCode;
     }
 
+    @GetMapping("/clear")
+    @CrossOrigin(origins = "*",maxAge = 3600)
+    public void clearRoom(){
+        gameRoomRepository.deleteAll();
+    }
+
     private String generateRandomRoomCode() {
         // 무작위 문자열 생성 영어 + 숫자 6자리
         int length = 6; // 방 코드 길이

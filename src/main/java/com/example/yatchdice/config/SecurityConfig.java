@@ -43,6 +43,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
                 .requestMatchers(
+                        "/api/rooms/clear",
                         "/ws/**",
                         "/swagger-resources/**",
                         "/v3/api-docs/**",
